@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A blind framing experiment: make trolley decisions, ask Jev, and discover who changes their mind when the facts are reordered."
+    />
+    <meta name="theme-color" content="#11100e" />
+    <title>Trolley Mirror — You vs Jev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="wordmark" href="#top" aria-label="Trolley Mirror home">
+        <span class="mark" aria-hidden="true">⌁</span>
+        Trolley Mirror
+      </a>
+      <div class="header-actions">
+        <span class="key-status" id="key-status"><i></i> Demo mode</span>
+        <button class="button button-small" id="connect-button" type="button">
+          Connect Pollen
+        </button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero shell">
+        <div class="eyebrow">A blind framing experiment · powered by Jev</div>
+        <h1>Would you notice<br />if the story moved <em>you?</em></h1>
+        <p class="hero-copy">
+          Make six trolley decisions. Some are secret twins: the facts stay the
+          same, only their order changes. At the end, the mirror reveals who
+          flipped—the human, the model, or both.
+        </p>
+
+        <div class="hero-actions">
+          <button class="button button-primary" id="start-button" type="button">
+            Enter the experiment <span aria-hidden="true">→</span>
+          </button>
+          <button class="text-button" id="how-button" type="button">
+            How it works
+          </button>
+        </div>
+
+        <div class="track-scene" aria-hidden="true">
+          <div class="track track-one"></div>
+          <div class="track track-two"></div>
+          <div class="switch-point"></div>
+          <div class="trolley"><span></span><span></span></div>
+          <div class="figures figures-five">● ● ● ● ●</div>
+          <div class="figures figures-one">●</div>
+        </div>
+
+        <div class="hero-meta">
+          <div><strong>6</strong><span>blind decisions</span></div>
+          <div><strong>3</strong><span>hidden pairs</span></div>
+          <div><strong>≈ 2 min</strong><span>to meet your bias</span></div>
+        </div>
+      </section>
+
+      <section class="game-section shell" id="game" hidden>
+        <div class="game-header">
+          <div>
+            <span class="eyebrow" id="round-label">Case 01 / 06</span>
+            <h2 id="case-title">The crossing</h2>
+          </div>
+          <div class="progress-wrap" aria-label="Experiment progress">
+            <div class="progress-track"><div id="progress-bar"></div></div>
+            <span id="progress-text">0%</span>
+          </div>
+        </div>
+
+        <article class="case-card">
+          <div class="case-visual" id="case-visual" aria-hidden="true">
+            <span class="signal"></span>
+            <span class="rail rail-a"></span>
+            <span class="rail rail-b"></span>
+            <span class="case-trolley">▰</span>
+          </div>
+          <div class="case-copy">
+            <p id="case-text"></p>
+            <div class="fact-row" id="fact-row"></div>
+          </div>
+        </article>
+
+        <div class="decision-grid">
+          <button class="choice-card" data-choice="stay" type="button">
+            <span class="choice-key">A</span>
+            <span class="choice-name">Do nothing</span>
+            <span class="choice-detail" id="stay-detail">Stay off the lever</span>
+          </button>
+          <button class="choice-card choice-pull" data-choice="pull" type="button">
+            <span class="choice-key">B</span>
+            <span class="choice-name">Intervene</span>
+            <span class="choice-detail" id="pull-detail">Pull the lever</span>
+          </button>
+        </div>
+
+        <div class="certainty-row">
+          <label for="certainty">How sure are you?</label>
+          <input id="certainty" type="range" min="50" max="100" value="75" />
+          <output id="certainty-output" for="certainty">75%</output>
+        </div>
+
+        <div class="analysis-panel" id="analysis-panel" hidden>
+          <div class="analysis-head">
+            <div>
+              <span class="eyebrow">Jev has answered</span>
+              <h3 id="jev-choice">Intervene</h3>
+            </div>
+            <div class="confidence-ring" id="confidence-ring">
+              <strong id="jev-confidence">82%</strong>
+              <span>confidence</span>
+            </div>
+          </div>
+          <div class="probability-bars" id="probability-bars"></div>
+          <div class="analysis-metrics">
+            <div><span>Moral necessity</span><strong id="necessity-value">—</strong></div>
+            <div><span>Acceptability</span><strong id="score-value">—</strong></div>
+            <div><span>Agreement</span><strong id="agreement-value">—</strong></div>
+          </div>
+          <p class="analysis-note" id="analysis-note"></p>
+        </div>
+
+        <div class="game-footer">
+          <span class="privacy-note">Your answer stays in this browser.</span>
+          <button class="button button-primary" id="next-button" type="button" disabled>
+            Ask Jev & continue
+          </button>
+        </div>
+      </section>
+
+      <section class="results-section shell" id="results" hidden>
+        <div class="results-intro">
+          <span class="eyebrow">The blind is lifted</span>
+          <h2>Your moral mirror</h2>
+          <p>
+            The paired cases held the same facts. Only the order and emphasis
+            changed. A flip does not make a decision wrong—it shows where framing
+            entered the room.
+          </p>
+        </div>
+
+        <div class="scoreboard">
+          <div class="big-score human-score">
+            <span>You flipped</span>
+            <strong id="human-flips">0/3</strong>
+            <small id="human-label">steadfast</small>
+          </div>
+          <div class="mirror-glyph" aria-hidden="true">↔</div>
+          <div class="big-score jev-score">
+            <span>Jev flipped</span>
+            <strong id="jev-flips">0/3</strong>
+            <small id="jev-label">steadfast</small>
+          </div>
+        </div>
+
+        <div class="pair-results" id="pair-results"></div>
+
+        <div class="fingerprint-card">
+          <div>
+            <span class="eyebrow">Your pattern</span>
+            <h3 id="fingerprint-title">The deliberate consequentialist</h3>
+            <p id="fingerprint-copy"></p>
+          </div>
+          <div class="axis-chart" id="axis-chart"></div>
+        </div>
+
+        <div class="results-actions">
+          <button class="button button-primary" id="replay-button" type="button">
+            Run it again
+          </button>
+          <button class="button" id="share-button" type="button">Copy result</button>
+        </div>
+      </section>
+
+      <section class="how-section shell" id="how">
+        <div class="section-number">01 / METHOD</div>
+        <div class="how-grid">
+          <div>
+            <h2>Not a personality quiz.<br /><em>A controlled surprise.</em></h2>
+          </div>
+          <ol>
+            <li><span>01</span><p>You choose before seeing any model answer.</p></li>
+            <li><span>02</span><p>Jev answers the same facts with calibrated probabilities.</p></li>
+            <li><span>03</span><p>Hidden twins test sensitivity to order and emphasis.</p></li>
+            <li><span>04</span><p>The final mirror compares flips, not “correct” answers.</p></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="jev-section shell">
+        <div class="section-number">02 / MODEL</div>
+        <div class="jev-grid">
+          <div class="jev-orb" aria-hidden="true"><span>JEV</span></div>
+          <div>
+            <span class="eyebrow">Decision intelligence, not an essay</span>
+            <h2>Three readings of every dilemma.</h2>
+            <p>
+              Trolley Mirror calls Pollinations’ typed decision endpoint with
+              <code>typesafe/jev-1.13</code>. Jev chooses an action, estimates
+              whether intervention is necessary, and scores its acceptability.
+            </p>
+            <div class="primitive-list">
+              <span><i>choice</i> pull or stay</span>
+              <span><i>noul</i> probability of necessity</span>
+              <span><i>score</i> moral acceptability</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>
+        <strong>Trolley Mirror</strong>
+        <span>Built for Pollinations Quest #17647</span>
+      </div>
+      <a href="https://pollinations.ai" target="_blank" rel="noreferrer">
+        Made with Pollinations.ai
+      </a>
+    </footer>
+
+    <dialog id="connect-dialog">
+      <button class="dialog-close" id="dialog-close" type="button" aria-label="Close">×</button>
+      <span class="eyebrow">Bring your own Pollen</span>
+      <h2>Let Jev enter the room.</h2>
+      <p>
+        Pollinations will ask you to approve a small, expiring budget. Your key
+        stays in this tab and every live decision is paid from your own balance.
+      </p>
+      <ul>
+        <li>Only the Jev decision model</li>
+        <li>1 Pollen maximum budget</li>
+        <li>Expires automatically after 7 days</li>
+      </ul>
+      <button class="button button-primary button-full" id="authorize-button" type="button">
+        Continue to Pollinations
+      </button>
+      <button class="text-button button-full" id="demo-button" type="button">
+        Keep playing with demo readings
+      </button>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
+
